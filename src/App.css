@@ -1,0 +1,39 @@
+.flex-container {
+    margin-top: 60px;
+    margin-left: 180px;
+    margin-right: 180px;
+    display: flex;
+    /*background-color: beige;*/
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.flex-element {
+    color: blue;
+    background: burlywood;
+    padding: 15px;
+    margin: 5px;
+    flex-basis: 30%;
+    height: 350px;
+}
+
+.flex-element img {
+
+}
+
+.header {
+    display: block;
+    text-align: center;
+    /*background-color: burlywood;*/
+}
+
+.button {
+    margin-top: 5px;
+    margin-bottom: 10px;
+    margin-left: 182px;
+    width: 1205px;
+    height: 45px;
+    background-color: #1E90FF;
+    border-radius: 15px;
+}
