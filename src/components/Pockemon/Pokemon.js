@@ -13,7 +13,8 @@ export class Pokemon extends React.Component {
             <React.Fragment>
             {
                 this.props.isShown
-                ? (<div>
+                ? (
+                    <div>
                         <div className="flex-element rendered_option">
                             <img className="img__poke" src={this.props.data.sprites.front_default} alt="pht"/>
 
@@ -25,7 +26,7 @@ export class Pokemon extends React.Component {
                                     {
                                         this.props.data.types
                                             .map(elem => {
-                                                return <button className="inline">{elem.type.name}</button>
+                                                return <button className="inline" key={this.props.data.name + Math.random().toString()}>{elem.type.name}</button>
                                             })
                                     }
                             </div>

@@ -3,7 +3,6 @@ import './App.css';
 import {Pokemon} from './components/Pockemon/Pokemon'
 
 class App extends React.Component {
-
     constructor(props) {
         super(props);
         this.state = {
@@ -19,46 +18,46 @@ class App extends React.Component {
         fetch('https://pokeapi.co/api/v2/pokemon?limit=12')
             .then(res => res.json())
             .then(res => this.setState({pokemons: res.results, next: res.next}))
-    };
-
-    getPocemonData = (url, name) => {
-        // console.log(document.getElementById(`id`).classList);
-        // document.getElementById(`id`).classList.remove('no_render');
-       return fetch(`${url}`)
-            .then(res => res.json())
-            .then(data => {
-                // console.log(data.sprites.front_default);
-                return data.sprites.front_default
+            .then(() => {
+                return this.state.pokemons.map(pokemon => {
+                    return fetch(pokemon.url)
+                        .then(r => r.json())
+                        .then(data => {
+                            this.setState({
+                                photoAndTypes: {...this.state.photoAndTypes, [data.name]: {
+                                        photoSrc: data.sprites.front_default,
+                                        types: [...data.types]
+                                    }}
+                            });
+                        })
+                })
             })
-
-    };
-
-    getPokemonPhotoAndTypesUrl = (url) => {
-        fetch(url)
-            .then(res => res.json())
-            .then(data => {
-                this.setState({
-                    photoAndTypes: {...this.state.photoAndTypes, [data.name]: {
-                            photo: data.sprites.front_default,
-                            types: [...data.types]
-                        }}
-                });
-            })
-            .then(() => console.log(this.state))
     };
 
     getPokemonDataByUrl = (url) => {
             fetch(url)
                 .then(response => response.json())
                 .then(data => this.setState({currentPokemon: data, isShown: true}))
-                .then(() => console.log(this.state))
     };
 
     loadMore = (next_url) => {
-        // console.log("next data - ", next_url);
         fetch(next_url)
             .then(res => res.json())
             .then(res => this.setState({pokemons: [...this.state.pokemons, ...res.results]}))
+            .then(() => {
+                return this.state.pokemons.map(pokemon => {
+                    return fetch(pokemon.url)
+                        .then(r => r.json())
+                        .then(data => {
+                            this.setState({
+                                photoAndTypes: {...this.state.photoAndTypes, [data.name]: {
+                                        photoSrc: data.sprites.front_default,
+                                        types: data.types
+                                    }}
+                            });
+                        })
+                })
+            })
     };
 
     componentDidMount() {
@@ -66,6 +65,7 @@ class App extends React.Component {
     }
 
     render() {
+        window.state = this.state
         return (
             <React.Fragment>
 
@@ -80,28 +80,33 @@ class App extends React.Component {
                     <div>
                         <div className="flex-container">
                             {
-                                this.state.pokemons.length > 1 && this.state.pokemons
+                                this.state.pokemons.length > 1 && this.state.photoAndTypes && this.state.pokemons
                                     .map(pokemon => {
                                         return (
                                             <div id={pokemon.name} className="flex-element"
                                                 onClick={() => {
                                                     this.getPokemonDataByUrl(pokemon.url)}}
                                                  key={pokemon.name + Math.random().toString()}>
-                                                <img className="img__poke" src={''} alt="pht"/>
+                                                <img className="img__poke"
+                                                     src={this.state.photoAndTypes && this.state.photoAndTypes[`${pokemon.name}`]
+                                                                                ? this.state.photoAndTypes[`${pokemon.name}`].photoSrc
+                                                                                : ''} alt="pht"/>
 
                                                 <div className="poke_title">
-                                                    <h3
-                                                        // onClick={() => this.getPocemonData(pokemon.url)}
-                                                    >{pokemon.name}</h3>
+                                                    <h3>{pokemon.name}</h3>
                                                 </div>
 
                                                 <div className="types">
-                                                    {
-
-                                                    }
+                                                    {/*{*/}
+                                                    {/*    this.state.photoAndTypes && this.state.photoAndTypes[`${pokemon.name}`].types !== undefined && this.state.photoAndTypes[`${pokemon.name}`].types*/}
+                                                    {/*        .map(elem => {*/}
+                                                    {/*            return <p>{elem.type.name}</p>*/}
+                                                    {/*        })*/}
+                                                    {/*}*/}
                                                     <button className="inline">Grass</button>
                                                     <button className="inline">Fire</button>
                                                 </div>
+
                                             </div>
                                         );
                                     })
