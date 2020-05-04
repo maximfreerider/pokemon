@@ -64,7 +64,7 @@
     margin-top: 5px;
     margin-bottom: 10px;
     margin-left: 15px;
-    width: 1185px;
+    width: 1310px;
     height: 45px;
     background-color: #9370DB;
     border-radius: 15px;
@@ -90,3 +90,21 @@
     display: block;
     text-align: right;
 }
+
+
+
+.parent {
+    display: flex;
+    flex-direction: row;
+}
+
+.no_render {
+    display: none;
+}
+
+.rendered_option {
+    position: fixed;
+    right: 5%;
+    top: 30%;
+}
+

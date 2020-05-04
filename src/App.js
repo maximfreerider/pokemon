@@ -9,6 +9,9 @@ class App extends React.Component {
         this.state = {
             pokemons: [],
             next: null,
+            currentPokemon: null,
+            isShown: false,
+            photoAndTypes: {},
         }
     }
 
@@ -18,10 +21,37 @@ class App extends React.Component {
             .then(res => this.setState({pokemons: res.results, next: res.next}))
     };
 
-    getPocemonData = (url) => {
-       fetch(`${url}`)
+    getPocemonData = (url, name) => {
+        // console.log(document.getElementById(`id`).classList);
+        // document.getElementById(`id`).classList.remove('no_render');
+       return fetch(`${url}`)
             .then(res => res.json())
-            .then(data => console.log(data))
+            .then(data => {
+                // console.log(data.sprites.front_default);
+                return data.sprites.front_default
+            })
+
+    };
+
+    getPokemonPhotoAndTypesUrl = (url) => {
+        fetch(url)
+            .then(res => res.json())
+            .then(data => {
+                this.setState({
+                    photoAndTypes: {...this.state.photoAndTypes, [data.name]: {
+                            photo: data.sprites.front_default,
+                            types: [...data.types]
+                        }}
+                });
+            })
+            .then(() => console.log(this.state))
+    };
+
+    getPokemonDataByUrl = (url) => {
+            fetch(url)
+                .then(response => response.json())
+                .then(data => this.setState({currentPokemon: data, isShown: true}))
+                .then(() => console.log(this.state))
     };
 
     loadMore = (next_url) => {
@@ -45,24 +75,42 @@ class App extends React.Component {
                     </div>
                 </header>
 
-                <div className="flex-container">
-                {
-                    this.state.pokemons.length > 1 && this.state.pokemons
-                        .map(pokemon => {
-                            return (
-                                <div className="flex-element" onClick={() => this.getPocemonData(pokemon.url)} key={pokemon.name + Math.random().toString()}>
-                                    <img className="img__poke" src={'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'} alt="pht"/>
-                                    <div className="poke_title">
-                                        <h3 onClick={() => this.getPocemonData(pokemon.url)}>{pokemon.name}</h3>
-                                    </div>
-                                    <div className="types">
-                                        <button className="inline">Grass</button>
-                                        <button className="inline">Fire</button>
-                                    </div>
-                                </div>
-                            );
-                        })
-                }
+                <div className="parent">
+
+                    <div>
+                        <div className="flex-container">
+                            {
+                                this.state.pokemons.length > 1 && this.state.pokemons
+                                    .map(pokemon => {
+                                        return (
+                                            <div id={pokemon.name} className="flex-element"
+                                                onClick={() => {
+                                                    this.getPokemonDataByUrl(pokemon.url)}}
+                                                 key={pokemon.name + Math.random().toString()}>
+                                                <img className="img__poke" src={''} alt="pht"/>
+
+                                                <div className="poke_title">
+                                                    <h3
+                                                        // onClick={() => this.getPocemonData(pokemon.url)}
+                                                    >{pokemon.name}</h3>
+                                                </div>
+
+                                                <div className="types">
+                                                    {
+
+                                                    }
+                                                    <button className="inline">Grass</button>
+                                                    <button className="inline">Fire</button>
+                                                </div>
+                                            </div>
+                                        );
+                                    })
+                            }
+                        </div>
+                    </div>
+                    <div>
+                        <Pokemon data={this.state.currentPokemon} isShown={this.state.isShown}/>
+                    </div>
                 </div>
 
                 <footer>
@@ -70,8 +118,6 @@ class App extends React.Component {
                             <p>Load More</p>
                         </button>
                 </footer>
-
-                <Pokemon type='Fire'/>
             </React.Fragment>
         );
     }
