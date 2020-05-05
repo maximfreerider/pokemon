@@ -1,14 +1,12 @@
 import React from 'react'
 
 export class Pokemon extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            pokemon_data: null
-        }
-    }
+    // constructor(props) {
+    //     super(props);
+    // }
 
     render () {
+        // console.log(this.props.data)
         return (
             <React.Fragment>
             {
@@ -16,33 +14,50 @@ export class Pokemon extends React.Component {
                 ? (
                     <div>
                         <div className="flex-element rendered_option">
-                            <img className="img__poke" src={this.props.data.sprites.front_default} alt="pht"/>
+                            <img src={this.props.data.sprites.front_default} alt="pht"/>
 
-                            <div className="poke_title">
+                            <div>
                                 <h3>{this.props.data.name}</h3>
                             </div>
 
-                            <div className="types">
-                                    {
-                                        this.props.data.types
-                                            .map(elem => {
-                                                return <button className="inline" key={this.props.data.name + Math.random().toString()}>{elem.type.name}</button>
-                                            })
-                                    }
-                            </div>
+                            <table className="table">
+                                <tbody>
+                                <tr>
+                                    <td>Type</td>
+                                    <td>{this.props.data.types[0].type.name}</td>
+                                </tr>
+                                <tr>
+                                    <td>Attack</td>
+                                    <td>no</td>
+                                </tr>
+                                <tr>
+                                    <td>Defense</td>
+                                    <td>no</td>
+                                </tr>
+                                <tr>
+                                    <td>HP</td>
+                                    <td>no</td>
+                                </tr>
+                                <tr>
+                                    <td>SP Defense</td>
+                                    <td>no</td>
+                                </tr>
+                                <tr>
+                                    <td>Speed</td>
+                                    <td>no</td>
+                                </tr>
+                                <tr>
+                                    <td>Weight</td>
+                                    <td>{this.props.data.weight}</td>
+                                </tr>
+                                <tr>
+                                    <td>total moves</td>
+                                    <td>{this.props.data.moves.length}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+
                         </div>
-                        {/*<div>*/}
-                        {/*    <img alt="poke_photo"/>*/}
-                        {/*    <h3>pokemon`s name</h3>*/}
-                        {/*    <table>*/}
-                        {/*        <tbody>*/}
-                        {/*            <tr>*/}
-                        {/*                <td>Type</td>*/}
-                        {/*                <td>Fire</td>*/}
-                        {/*            </tr>*/}
-                        {/*        </tbody>*/}
-                        {/*    </table>*/}
-                        {/*</div>*/}
                     </div>)
                     : null
             }

@@ -108,3 +108,11 @@
     top: 30%;
 }
 
+.rendered_option img {
+    height: 117px;
+    width: 140px;
+}
+
+table, tr, td {
+    border: 1px solid black;
+}

@@ -11,6 +11,7 @@ class App extends React.Component {
             currentPokemon: null,
             isShown: false,
             photoAndTypes: {},
+            isLoaded: false
         }
     }
 
@@ -54,18 +55,31 @@ class App extends React.Component {
                                         photoSrc: data.sprites.front_default,
                                         types: data.types
                                     }}
-                            });
+                            })
                         })
                 })
             })
     };
 
-    componentDidMount() {
+    componentWillMount() {
         this.getPokemons();
     }
 
+    getTypeData = (elem) => {
+        if (elem) {
+            // console.log(elem.types);
+            if(elem.types) {
+                for(let i = 0; i < elem.types.length; i++) {
+                    return <button className={"inline"}>{elem.types[i].type.name}</button>
+                }
+            }
+            return JSON.stringify(elem.types)
+        }
+        return 'no data'
+    };
+
     render() {
-        window.state = this.state
+        window.state = this.state;
         return (
             <React.Fragment>
 
@@ -77,45 +91,44 @@ class App extends React.Component {
 
                 <div className="parent">
 
-                    <div>
-                        <div className="flex-container">
-                            {
-                                this.state.pokemons.length > 1 && this.state.photoAndTypes && this.state.pokemons
-                                    .map(pokemon => {
-                                        return (
-                                            <div id={pokemon.name} className="flex-element"
-                                                onClick={() => {
-                                                    this.getPokemonDataByUrl(pokemon.url)}}
-                                                 key={pokemon.name + Math.random().toString()}>
-                                                <img className="img__poke"
-                                                     src={this.state.photoAndTypes && this.state.photoAndTypes[`${pokemon.name}`]
-                                                                                ? this.state.photoAndTypes[`${pokemon.name}`].photoSrc
-                                                                                : ''} alt="pht"/>
+                    <div className="flex-container">
+                        {
+                            this.state.pokemons.length > 1 && this.state.photoAndTypes && this.state.pokemons
+                                .map(pokemon => {
+                                    return (
+                                        <div id={pokemon.name} className="flex-element"
+                                            onClick={() => {
+                                                this.getPokemonDataByUrl(pokemon.url)}}
+                                             key={pokemon.name + Math.random().toString()}>
+                                            <img className="img__poke"
+                                                 src={this.state.photoAndTypes && this.state.photoAndTypes[`${pokemon.name}`]
+                                                                            ? this.state.photoAndTypes[`${pokemon.name}`].photoSrc
+                                                                            : ''} alt="pht"/>
 
-                                                <div className="poke_title">
-                                                    <h3>{pokemon.name}</h3>
-                                                </div>
-
-                                                <div className="types">
-                                                    {/*{*/}
-                                                    {/*    this.state.photoAndTypes && this.state.photoAndTypes[`${pokemon.name}`].types !== undefined && this.state.photoAndTypes[`${pokemon.name}`].types*/}
-                                                    {/*        .map(elem => {*/}
-                                                    {/*            return <p>{elem.type.name}</p>*/}
-                                                    {/*        })*/}
-                                                    {/*}*/}
-                                                    <button className="inline">Grass</button>
-                                                    <button className="inline">Fire</button>
-                                                </div>
-
+                                            <div className="poke_title">
+                                                <h3>{pokemon.name}</h3>
                                             </div>
-                                        );
-                                    })
-                            }
-                        </div>
+
+                                            <div className="types">
+                                                {
+                                                    this.state.photoAndTypes
+                                                        ? this.getTypeData(this.state.photoAndTypes[`${pokemon.name}`])
+                                                        : <p>no data</p>
+                                                }
+                                                {/*<button className="inline">Grass</button>*/}
+                                                {/*<button className="inline">Fire</button>*/}
+                                            </div>
+
+                                        </div>
+                                    );
+                                })
+                        }
                     </div>
+
                     <div>
                         <Pokemon data={this.state.currentPokemon} isShown={this.state.isShown}/>
                     </div>
+
                 </div>
 
                 <footer>
