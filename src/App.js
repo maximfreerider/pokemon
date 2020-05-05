@@ -11,7 +11,6 @@ class App extends React.Component {
             currentPokemon: null,
             isShown: false,
             photoAndTypes: {},
-            isLoaded: false
         }
     }
 
@@ -61,21 +60,21 @@ class App extends React.Component {
             })
     };
 
-    componentWillMount() {
+    componentDidMount() {
         this.getPokemons();
     }
 
     getTypeData = (elem) => {
+        let names = []
         if (elem) {
-            // console.log(elem.types);
             if(elem.types) {
                 for(let i = 0; i < elem.types.length; i++) {
-                    return <button className={"inline"}>{elem.types[i].type.name}</button>
+                    names.push(elem.types[i].type.name)
                 }
             }
-            return JSON.stringify(elem.types)
         }
-        return 'no data'
+        let btns = names.map(name => <button className={"inline"}>{name}</button>)
+        return btns
     };
 
     render() {
@@ -115,8 +114,6 @@ class App extends React.Component {
                                                         ? this.getTypeData(this.state.photoAndTypes[`${pokemon.name}`])
                                                         : <p>no data</p>
                                                 }
-                                                {/*<button className="inline">Grass</button>*/}
-                                                {/*<button className="inline">Fire</button>*/}
                                             </div>
 
                                         </div>
